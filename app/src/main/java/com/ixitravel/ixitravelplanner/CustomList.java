@@ -1,6 +1,7 @@
 package com.ixitravel.ixitravelplanner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -64,6 +65,18 @@ import java.util.ArrayList;
                 LayoutInflater inflater = context.getLayoutInflater();
                 convertView= inflater.inflate(R.layout.list_single,parent,false);
             }
+            convertView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    TextView txtTitle = (TextView) v.findViewById(R.id.txt);
+                    String city = txtTitle.getText().toString();
+                    Intent intent = new Intent(getContext(), CityDescriptionActivity.class);
+                    intent.putExtra("city", city);
+                    getContext().startActivity(intent);
+
+                }
+            });
 
             //View rowView= inflater.inflate(R.layout.list_single, null, true);
             TextView txtTitle = (TextView) convertView.findViewById(R.id.txt);
