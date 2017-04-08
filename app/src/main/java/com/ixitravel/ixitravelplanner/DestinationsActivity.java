@@ -1,6 +1,7 @@
 package com.ixitravel.ixitravelplanner;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,25 +11,25 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-
-import static android.R.attr.name;
-import static android.R.id.list;
+import java.util.Scanner;
 
 public class DestinationsActivity extends AppCompatActivity {
     String TAG = "DestinationsActivity";
     String jasonResult;
+    CustomList adapter;
     EditText editText;
     ArrayList<Destination> destinations = new ArrayList<>();
+    //String[] destinationss = {"d","h","h","f"};
     private ProgressDialog pDialog;
     private String urlJsonObj = "http://build2.ixigo.com/api/v2/widgets/brand/inspire?product=1&apiKey=ixicode!2$";
 
@@ -39,6 +40,13 @@ public class DestinationsActivity extends AppCompatActivity {
     };
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("deepak", "onResume");
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destinations);
@@ -46,11 +54,20 @@ public class DestinationsActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
-        makeJsonObjectRequest();
+        //makeJsonObjectRequest();
+        GithubQueryTask task = new GithubQueryTask();
+        try {
+            task.execute(new URL(urlJsonObj));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
 
 
-        CustomList adapter = new
+
+        /*CustomList adapter = new
+                CustomList(DestinationsActivity.this, destinations);*/
+        adapter = new
                 CustomList(DestinationsActivity.this, destinations);
         list=(ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -64,7 +81,107 @@ public class DestinationsActivity extends AppCompatActivity {
             }
         });
     }
-    public void makeJsonObjectRequest() {
+
+    public class GithubQueryTask extends AsyncTask<URL, Void, String> {
+
+        // COMPLETED (26) Override onPreExecute to set the loading indicator to visible
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showpDialog();
+        }
+        public String getResponseFromHttpUrl(URL url) throws IOException {
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            try {
+                InputStream in = urlConnection.getInputStream();
+
+                Scanner scanner = new Scanner(in);
+                scanner.useDelimiter("\\A");
+
+                boolean hasInput = scanner.hasNext();
+                if (hasInput) {
+                    return scanner.next();
+                } else {
+                    return null;
+                }
+            } finally {
+                urlConnection.disconnect();
+            }
+        }
+        @Override
+        protected String doInBackground(URL... params) {
+            URL searchUrl = params[0];
+            String githubSearchResults = null;
+            try {
+                githubSearchResults = getResponseFromHttpUrl(searchUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return githubSearchResults;
+        }
+        private void showJsonDataView(JSONObject response) {
+            try {
+                JSONObject dataObj = response.getJSONObject("data");
+
+            JSONArray flights = dataObj.getJSONArray("flight");
+            for (int i = 0; i < flights.length(); i++) {
+                JSONObject c = flights.getJSONObject(i);
+
+                String image = c.getString("image");
+                String name = c.getString("name");
+                Log.d(TAG, "image: " + image);
+                String countryName = c.getString("countryName");
+                Log.d(TAG, "countryName: " + countryName);
+                String url = c.getString("url");
+                String data = c.getString("data");
+                String text = c.getString("text");
+                String type = c.getString("type");
+                String cityName = c.getString("cityName");
+                String stateName = c.getString("stateName");
+                String price = String.valueOf(c.getInt("price"));
+                String currency = c.getString("currency");
+                String cityId = c.getString("cityId");
+                JSONArray destinationCategories = c.getJSONArray("destinationCategories");
+                Toast.makeText(getApplicationContext(),
+                        image, Toast.LENGTH_SHORT).show();
+                adapter.notifyDataSetChanged();
+                destinations.add(new Destination(image,
+                        name,
+                        countryName,
+                        url,
+                        data,
+                        text,
+                        type,
+                        cityName,
+                        stateName,
+                        price,
+                        currency,
+                        cityId));
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        @Override
+        protected void onPostExecute(String githubSearchResults) {
+            // COMPLETED (27) As soon as the loading is complete, hide the loading indicator
+            hidepDialog();
+            if (githubSearchResults != null && !githubSearchResults.equals("")) {
+                // COMPLETED (17) Call showJsonDataView if we have valid, non-null results
+                try {
+                    JSONObject jobj = new JSONObject(githubSearchResults);
+                    showJsonDataView(jobj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                // COMPLETED (16) Call showErrorMessage if the result is null in onPostExecute
+               Log.e("deepak", "error");
+            }
+        }
+    }
+    /*public void makeJsonObjectRequest() {
         showpDialog();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -83,8 +200,9 @@ public class DestinationsActivity extends AppCompatActivity {
                         JSONObject c = flights.getJSONObject(i);
 
                         String image = c.getString("image");
+                        String name = c.getString("name");
                         Log.d(TAG, "image: "+ image);
-                        String countryName = String.valueOf(c.getString("countryName"));
+                        String countryName = c.getString("countryName");
                         Log.d(TAG, "countryName: "+ countryName);
                         String url = c.getString("url");
                         String data = c.getString("data");
@@ -98,6 +216,7 @@ public class DestinationsActivity extends AppCompatActivity {
                         JSONArray destinationCategories = c.getJSONArray("destinationCategories");
                         Toast.makeText(getApplicationContext(),
                                 image, Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
                         destinations.add(new Destination(image,
                                 name,
                                 countryName,
@@ -112,8 +231,7 @@ public class DestinationsActivity extends AppCompatActivity {
                                 cityId));
                     }
 
-
-                } catch (/*JSON*/Exception e) {
+                } catch (*//*JSON*//*Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
                             "Error: " + e.getMessage(),
@@ -135,7 +253,7 @@ public class DestinationsActivity extends AppCompatActivity {
 
         // Adding request to request queue
         AppController.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
-    }
+    }*/
 
 
 
