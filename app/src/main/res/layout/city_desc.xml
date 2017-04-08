@@ -17,22 +17,27 @@
                 android:orientation="vertical">
                 <ImageView
                     android:id="@+id/cityImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="400sp"
+                    android:layout_height="400sp"
+                    android:layout_gravity="fill_horizontal"
+                    android:padding="20sp"
+                    android:gravity="center_horizontal"/>
 
                 <TextView
                     android:id="@+id/cityname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textAlignment="center"
                     android:textColor="#0000ff"
                     android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal"
+                    android:padding="20sp"/>
 
                 <TextView
                     android:id="@+id/about"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="About:"
                     android:textAlignment="center"
@@ -42,30 +47,34 @@
 
                 <TextView
                     android:id="@+id/citydesc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textSize="20sp"
                     android:textColor="#0000ff"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:padding="20sp"/>
 
                 <TextView
                     android:id="@+id/visit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Why To Visit:"
                     android:textSize="30sp"
                     android:textColor="#0000ff"
                     android:textStyle="bold"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"/>
                 <TextView
                     android:id="@+id/whytovisit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textSize="20sp"
                     android:textColor="#0000ff"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:padding="20sp"
+                    />
 
             </LinearLayout>
         </ScrollView>
