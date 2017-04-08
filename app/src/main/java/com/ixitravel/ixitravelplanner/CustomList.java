@@ -71,13 +71,16 @@ import java.util.ArrayList;
                 public void onClick(View v) {
                     TextView txtTitle = (TextView) v.findViewById(R.id.txt);
                     String city = txtTitle.getText().toString();
+                    String cityId = (String) v.getTag(R.string.tagid);
                     Intent intent = new Intent(getContext(), CityDescriptionActivity.class);
                     intent.putExtra("city", city);
+                    intent.putExtra("cityId", cityId);
                     getContext().startActivity(intent);
 
                 }
             });
-
+            String cityId = destination.get(position).cityId;
+            convertView.setTag(R.string.tagid,cityId);
             //View rowView= inflater.inflate(R.layout.list_single, null, true);
             TextView txtTitle = (TextView) convertView.findViewById(R.id.txt);
 

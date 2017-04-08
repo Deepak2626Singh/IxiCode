@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,8 +75,7 @@ public class DestinationsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(DestinationsActivity.this, "You Clicked at " +web[+ position], Toast.LENGTH_SHORT).show();
-
+                // do nothing
             }
         });
     }
@@ -142,8 +140,8 @@ public class DestinationsActivity extends AppCompatActivity {
                 String currency = c.getString("currency");
                 String cityId = c.getString("cityId");
                 JSONArray destinationCategories = c.getJSONArray("destinationCategories");
-                Toast.makeText(getApplicationContext(),
-                        image, Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getApplicationContext(),
+                        image, Toast.LENGTH_SHORT).show();*/
                 adapter.notifyDataSetChanged();
                 destinations.add(new Destination(image,
                         name,

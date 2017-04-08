@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">IxiTravelPlanner</string>
+    <string name="tagid">Tag</string>
+
 </resources>
