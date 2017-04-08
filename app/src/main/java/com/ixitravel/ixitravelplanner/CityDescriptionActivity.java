@@ -1,6 +1,9 @@
 package com.ixitravel.ixitravelplanner;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,6 +12,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +27,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -33,9 +40,12 @@ public class CityDescriptionActivity extends AppCompatActivity {
     String TAG = "CityDescriptionActivity";
     private ProgressDialog pDialog;
     String cityId;
+    String price;
     TextView cityText;
     TextView cityDesc;
     TextView cityVisit;
+    Double latitude;
+    Double longitude;
 
 
 
@@ -44,6 +54,7 @@ public class CityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.city_desc);
         cityId = getIntent().getStringExtra("cityId");
+        price = getIntent().getStringExtra("price");
         //TextView textView = (TextView)findViewById(R.id.cityname);
         //textView.setText(cityId);
 
@@ -70,8 +81,30 @@ public class CityDescriptionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.desc_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.new_game:
+                showPrice(price);
+                return true;
+            case R.id.help:
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public class GithubQueryTask extends AsyncTask<URL, Void, String> {
@@ -152,6 +185,8 @@ public class CityDescriptionActivity extends AppCompatActivity {
                     String whyToVisit = c.getString("whyToVisit");
                     Log.d(TAG, "whyToVisit" + whyToVisit);
                     String keyImageUrl = c.getString("keyImageUrl");
+                    latitude = c.getDouble("latitude");
+                    longitude = c.getDouble("longitude");
                     //TextView cityText = (TextView)findViewById(R.id.cityname);
                     cityText.setText(countryName);
                     //TextView cityDesc = (TextView)findViewById(R.id.citydesc);
@@ -214,5 +249,17 @@ public class CityDescriptionActivity extends AppCompatActivity {
             ImageView cityImage = (ImageView)findViewById(R.id.cityImage);
             cityImage.setImageBitmap(bp);
         }
+    }
+    void showPrice(String price) {
+        new AlertDialog.Builder(this)
+                .setTitle("Fare")
+                .setMessage("Fare is Rs. " + price)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(R.drawable.rupee)
+                .show();
     }
 }

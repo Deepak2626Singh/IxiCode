@@ -72,15 +72,19 @@ import java.util.ArrayList;
                     TextView txtTitle = (TextView) v.findViewById(R.id.txt);
                     String city = txtTitle.getText().toString();
                     String cityId = (String) v.getTag(R.string.tagid);
+                    String price = (String) v.getTag(R.string.pricetagid);
                     Intent intent = new Intent(getContext(), CityDescriptionActivity.class);
                     intent.putExtra("city", city);
                     intent.putExtra("cityId", cityId);
+                    intent.putExtra("price", price);
                     getContext().startActivity(intent);
 
                 }
             });
             String cityId = destination.get(position).cityId;
+            String price = destination.get(position).price;
             convertView.setTag(R.string.tagid,cityId);
+            convertView.setTag(R.string.pricetagid,price);
             //View rowView= inflater.inflate(R.layout.list_single, null, true);
             TextView txtTitle = (TextView) convertView.findViewById(R.id.txt);
 

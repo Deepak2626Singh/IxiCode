@@ -9,39 +9,37 @@
         android:orientation="vertical"
         android:background="@drawable/tours">
 
-     <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
-    <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/autoCompleteTextView2"
-        android:hint="Tell Us Where You Wanna Go"
-        android:layout_marginTop="53dp"
-        android:layout_below="@+id/editText2"
-        android:layout_centerHorizontal="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-         <Button
-             android:id="@+id/autoCompButton"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="34dp"
-             android:text="Go to This Location"
-             android:layout_below="@+id/autoCompleteTextView2"
-             android:layout_alignParentStart="true"
-             android:layout_marginStart="64dp"
-             android:onClick="goToCityActvity" />
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editText2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="53dp"
+                android:hint="Tell Us Where You Wanna Go" />
 
-         <Button
-             android:id="@+id/trendingButton"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="34dp"
-             android:text="Show Me Trending Places"
-             android:layout_below="@+id/autoCompButton"
-             android:layout_alignParentStart="true"
-             android:layout_marginStart="64dp"
-             android:onClick="trendingActvity"/>
-     </RelativeLayout>
+            <Button
+                android:id="@+id/autoCompButton"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:onClick="goToCityActvity"
+                android:text="Go to This Location"
+                android:layout_below="@+id/autoCompleteTextView2"
+                android:layout_centerHorizontal="true" />
 
-</FrameLayout>
+            <Button
+                android:id="@+id/trendingButton"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:onClick="trendingActvity"
+                android:text="Show Me Trending Places"
+                android:layout_below="@+id/autoCompButton"
+                android:layout_alignStart="@+id/autoCompButton" />
+        </RelativeLayout>
+
+    </FrameLayout>

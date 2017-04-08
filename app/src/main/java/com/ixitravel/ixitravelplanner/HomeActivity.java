@@ -79,13 +79,14 @@ public class HomeActivity extends AppCompatActivity {
         String city = autoCompleteTextView.getEditableText().toString();
         int c=0;
         for (String s : cityName) {
-            c++;
+
             if (s.equals(city)) {
                 String id = cityId[c];
                 Intent intent = new Intent(this, CityDescriptionActivity.class);
                 intent.putExtra("cityId", id);
                 startActivity(intent);
             }
+            c++;
         }
 
     }
