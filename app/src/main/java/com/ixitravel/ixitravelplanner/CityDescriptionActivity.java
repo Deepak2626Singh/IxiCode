@@ -1,6 +1,5 @@
 package com.ixitravel.ixitravelplanner;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +7,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,12 +27,16 @@ import java.util.Scanner;
  * Created by Deepak on 4/8/2017.
  */
 
-public class CityDescriptionActivity extends Activity {
+public class CityDescriptionActivity extends AppCompatActivity {
 
     CustomList adapter;
     String TAG = "CityDescriptionActivity";
     private ProgressDialog pDialog;
     String cityId;
+    TextView cityText;
+    TextView cityDesc;
+    TextView cityVisit;
+
 
 
     @Override
@@ -39,8 +44,15 @@ public class CityDescriptionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.city_desc);
         cityId = getIntent().getStringExtra("cityId");
-        TextView textView = (TextView)findViewById(R.id.cityname);
-        textView.setText(cityId);
+        //TextView textView = (TextView)findViewById(R.id.cityname);
+        //textView.setText(cityId);
+
+        cityText = (TextView)findViewById(R.id.cityname);
+
+        cityDesc = (TextView)findViewById(R.id.citydesc);
+
+        cityVisit = (TextView)findViewById(R.id.whytovisit);
+
 
         Uri builtUri = Uri.parse("http://build2.ixigo.com/api/v3/namedentities/id")
                 .buildUpon()
@@ -104,6 +116,12 @@ public class CityDescriptionActivity extends Activity {
         protected void onPostExecute(String githubSearchResults) {
             // COMPLETED (27) As soon as the loading is complete, hide the loading indicator
             hidepDialog();
+
+            ((TextView)findViewById(R.id.about)).setVisibility(View.VISIBLE);
+            ((TextView)findViewById(R.id.visit)).setVisibility(View.VISIBLE);
+            cityText.setVisibility(View.VISIBLE);
+            cityDesc.setVisibility(View.VISIBLE);
+            cityVisit.setVisibility(View.VISIBLE);
             if (githubSearchResults != null && !githubSearchResults.equals("")) {
                 // COMPLETED (17) Call showJsonDataView if we have valid, non-null results
                 try {
@@ -134,11 +152,11 @@ public class CityDescriptionActivity extends Activity {
                     String whyToVisit = c.getString("whyToVisit");
                     Log.d(TAG, "whyToVisit" + whyToVisit);
                     String keyImageUrl = c.getString("keyImageUrl");
-                    TextView cityText = (TextView)findViewById(R.id.cityname);
+                    //TextView cityText = (TextView)findViewById(R.id.cityname);
                     cityText.setText(countryName);
-                    TextView cityDesc = (TextView)findViewById(R.id.citydesc);
+                    //TextView cityDesc = (TextView)findViewById(R.id.citydesc);
                     cityDesc.setText(description);
-                    TextView cityVisit = (TextView)findViewById(R.id.whytovisit);
+                    //TextView cityVisit = (TextView)findViewById(R.id.whytovisit);
                     cityVisit.setText(whyToVisit);
                     //ImageView cityImage = (ImageView)findViewById(R.id.cityImage);
                     DecodeTask decodeTask = new DecodeTask();
@@ -156,8 +174,15 @@ public class CityDescriptionActivity extends Activity {
         }
 
         private void showpDialog() {
-            if (!pDialog.isShowing())
+
+            ((TextView)findViewById(R.id.about)).setVisibility(View.INVISIBLE);
+            ((TextView)findViewById(R.id.visit)).setVisibility(View.INVISIBLE);
+            cityText.setVisibility(View.INVISIBLE);
+            cityDesc.setVisibility(View.INVISIBLE);
+            cityVisit.setVisibility(View.INVISIBLE);
+            if (!pDialog.isShowing()) {
                 pDialog.show();
+            }
         }
 
         private void hidepDialog() {

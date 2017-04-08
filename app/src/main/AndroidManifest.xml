@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ixitravel.ixitravelplanner">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,14 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DestinationsActivity">
+            android:label="Trending Locations"
+        </activity>
+        <activity android:name=".SampleJsonActivity" />
+        <activity android:name=".CityDescriptionActivity" />
+        <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SampleJsonActivity"></activity>
-        <activity android:name=".CityDescriptionActivity"></activity>
     </application>
 
 </manifest>
